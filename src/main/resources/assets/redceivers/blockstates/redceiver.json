@@ -1,0 +1,6 @@
+{
+  "variants": {
+    "powered=true": { "model": "redceivers:block/redceiver_on" },
+    "powered=false": { "model": "redceivers:block/redceiver_off"}
+  }
+}
