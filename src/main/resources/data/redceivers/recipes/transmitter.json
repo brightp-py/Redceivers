@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    " g ",
+    " g ",
+    "AAA"
+  ],
+  "key":
+  {
+    "g":
+    {
+      "item": "minecraft:gold_nugget"
+    },
+    "A":
+    {
+      "item": "minecraft:andesite"
+    }
+  },
+  "result":
+  {
+    "item": "redceivers:transmitter",
+    "count": 1
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "ggg",
+    "grg",
+    "gAg"
+  ],
+  "key":
+  {
+    "g":
+    {
+      "item": "minecraft:gold_nugget"
+    },
+    "r":
+    {
+      "item": "minecraft:redstone"
+    },
+    "A":
+    {
+      "item": "minecraft:andesite"
+    }
+  },
+  "result":
+  {
+    "item": "redceivers:redceiver",
+    "count": 1
+  }
+}
