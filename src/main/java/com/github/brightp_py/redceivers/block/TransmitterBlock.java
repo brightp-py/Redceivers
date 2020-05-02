@@ -8,13 +8,16 @@ import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 
 import javax.annotation.Nullable;
+import java.util.Random;
 
 public class TransmitterBlock extends Block {
 
@@ -26,13 +29,15 @@ public class TransmitterBlock extends Block {
         this.setDefaultState(this.getDefaultState().
                 with(POWERED, false)
         );
+
+
     }
 
-    @Override
-    public ActionResultType onBlockActivated(final BlockState state, final World worldIn, final BlockPos pos, final PlayerEntity player, final Hand handIn, final BlockRayTraceResult hit) {
-        worldIn.setBlockState(pos, this.getDefaultState().with(POWERED, !state.get(POWERED)));
-        return ActionResultType.SUCCESS;
-    }
+//    @Override
+//    public ActionResultType onBlockActivated(final BlockState state, final World worldIn, final BlockPos pos, final PlayerEntity player, final Hand handIn, final BlockRayTraceResult hit) {
+//        worldIn.setBlockState(pos, this.getDefaultState().with(POWERED, !state.get(POWERED)));
+//        return ActionResultType.SUCCESS;
+//    }
 
     @Override
     public int getLightValue(final BlockState state) {
@@ -45,4 +50,30 @@ public class TransmitterBlock extends Block {
         builder.add(POWERED);
     }
 
+    public boolean canConnectRedstone(final BlockState state, final World worldIn, final BlockPos pos, @Nullable Direction side) {
+        return true;
+    }
+
+    @Override
+    public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
+        if (!worldIn.isRemote) {
+            boolean flag = state.get(POWERED);
+            if (flag != worldIn.isBlockPowered(pos)) {
+                if (flag) {
+                    worldIn.getPendingBlockTicks().scheduleTick(pos, this, 4);
+                } else {
+                    worldIn.setBlockState(pos, state.cycle(POWERED), 2);
+                }
+            }
+
+        }
+    }
+
+    @Override
+    public void tick(BlockState state, ServerWorld worldIn, BlockPos pos, Random rand) {
+        if (state.get(POWERED) && !worldIn.isBlockPowered(pos)) {
+            worldIn.setBlockState(pos, state.cycle(POWERED), 2);
+        }
+
+    }
 }
